@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UPC Dose Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f6;
+    }
+
+    header {
+      background: linear-gradient(90deg, orange, green, blue);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 30px;
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+
+    label, select, input, button {
+      display: block;
+      width: 100%;
+      margin: 15px 0;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #1b9c85;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #188a77;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e8f5e9;
+      border-left: 5px solid green;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+        <img src="logo.png" alt="Company Logo" style="height: 75px;">
+    </div>
+    <div>UPC Dose Calculator</div>
+  </header>
+
+  <div class="container">
+    <label for="age">Enter Age (in years):</label>
+    <input type="number" id="age" placeholder="e.g. 4">
+
+    <button onclick="calculateDose()">Calculate Dose</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateDose() {
+      const age = parseFloat(document.getElementById("age").value);
+      const result = document.getElementById("result");
+
+      if (isNaN(age) || age <= 0) {
+        result.innerHTML = "<strong>Please enter a valid age.</strong>";
+        return;
+      }
+
+      let doses = [];
+
+      // Define dose logic
+      if (age >= 2 && age <= 5) {
+        doses.push("##### Mucolytics #####");
+        doses.push("Bromohexine: 5ml twice daily");
+        doses.push("Ambroxol 15mg/5ml: 2.5ml 3 times");
+        doses.push("Ambroxol 30mg/5ml: 1.25ml 3 times");
+        doses.push("Carbocystiene 2%: 3ml - 5ml twice");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 1st Gen Anti-Histamin #####");
+        doses.push("Chlorpheniramine: 1mg 4 times");
+        doses.push("Dimetindene: 2drops/Kg/Day Divided on 3 times");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 2st Gen Anti-Histamin #####");
+        doses.push("Desloratadine: 1.25mg/day");
+        doses.push("Cetrizine: 2.5mg/day");
+        doses.push("Loratadine: 5mg/day");
+        doses.push("Fexofenadine: 30mg twice");
+      } else if (age > 5 && age < 6) {
+        doses.push("##### Mucolytics #####");
+        doses.push("Bromohexine: 5ml 4 times daily");
+        doses.push("Ambroxol 15mg/5ml: 2.5ml 3 times");
+        doses.push("Ambroxol 30mg/5ml: 1.25ml 3 times");
+        doses.push("Carbocystiene 2%: 5ml 3 times");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 1st Gen Anti-Histamin #####");
+        doses.push("Chlorpheniramine: 1mg 4 times");
+        doses.push("Dimetindene: 2drops/Kg/Day Divided on 3 times");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 2st Gen Anti-Histamin #####");
+        doses.push("Desloratadine: 1.25mg/day");
+        doses.push("Cetrizine: 2.5mg/day");
+        doses.push("Loratadine: 5mg/day");
+        doses.push("Fexofenadine: 30mg twice");
+      } else if (age >= 6 && age <= 12) {
+        doses.push("##### Mucolytics #####");
+        doses.push("Bromohexine: 5ml 4 times daily");
+        doses.push("Ambroxol 15mg/5ml: 5ml 3 times");
+        doses.push("Ambroxol 30mg/5ml: 2.5ml 3 times");
+        doses.push("Carbocystiene 2%: 5ml 3 times");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 1st Gen Anti-Histamin #####");
+        doses.push("Chlorpheniramine: 2mg 4 times");
+        doses.push("Diphenhydramine: 12.5-25mg 4 times");
+        doses.push("Dimetindene: 2drops/Kg/Day Divided on 3 times");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 2st Gen Anti-Histamin #####");
+        doses.push("Desloratadine: 2.5mg/day");
+        doses.push("Cetrizine: 2.5-5mg/day");
+        doses.push("Loratadine: 10mg/day");
+        doses.push("Fexofenadine: 30mg twice");
+      } else if (age > 12) {
+        doses.push("##### Mucolytics #####");
+        doses.push("Bromohexine: 10ml 3 times");
+        doses.push("Ambroxol 30mg/5ml: 5ml 3 times");
+        doses.push("Carbocystiene 5%: 15ml 3 times");
+        doses.push("Acetylcisteine: 600mg once daily");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 1st Gen Anti-Histamin #####");
+        doses.push("Chlorpheniramine: 4mg 4 times");
+        doses.push("Diphenhydramine: 25-50mg 4 times");
+        doses.push("Dimetindene: 20-40 drops 3 times");
+        doses.push("---------------------------------------------------------");
+        doses.push("##### 2st Gen Anti-Histamin #####");
+        doses.push("Desloratadine: 5mg/day");
+        doses.push("Cetrizine: 5-10mg once");
+        doses.push("Loratadine: 10mg/day");
+        doses.push("Fexofenadine: 60mg twice");
+      } else if (age >= 1 && age < 2) {
+        doses.push("Dimetindene: 2 drops/kg/day divided into 3 times");
+      } else {
+        doses.push("No recommendations for this age.");
+      }
+
+      result.innerHTML = "<strong>Recommended Doses:</strong><ul>" + doses.map(d => `<li>${d}</li>`).join('') + "</ul>";
+    }
+  </script>
+</body>
+</html>
