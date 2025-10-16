@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Respiratory Medication Dose Calculator</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Respiratory Medication Dose Calculator">
+  <meta property="og:description" content="Quickly calculate doses for respiratory medications with this easy-to-use tool.">
+  <meta property="og:image" content="icon.png">
+  <meta property="og:type" content="website">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4ecdc56f 0%, #45b7d1 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 1%, #45b7d1 100%);
+      color: white;
+      padding: 25px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      margin-bottom: 30px;
+      animation: slideDown 0.6s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo img {
+      height: 75px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+      transition: transform 0.3s ease;
+    }
+
+    .logo img:hover {
+      transform: scale(1.05);
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .calculator-section {
+      padding: 40px;
+      background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+    }
+
+    .input-group {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 1.1rem;
+      color: #2c3e50;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      gap: 15px;
+      align-items: stretch;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.3rem;
+      color: #66eab3;
+      pointer-events: none;
+    }
+
+    input[type="number"] {
+      flex: 1;
+      padding: 18px 18px 18px 55px;
+      font-size: 1.1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #66eabc;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
+
+    button {
+      padding: 18px 40px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #66eae8 0%, #4b7ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      min-width: 180px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    .result-section {
+      margin-top: 40px;
+      display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    .result-section.show {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .result-header {
+      background: linear-gradient(135deg, #66e6ea 0%, #4b74a2 100%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px 15px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .result-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .age-badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 1rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .result-content {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-top: none;
+      border-radius: 0 0 15px 15px;
+      padding: 0;
+    }
+
+    .medication-category {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    .medication-category:last-child {
+      border-bottom: none;
+    }
+
+    .category-header {
+      background: linear-gradient(to right, #f8f9fa, #ffffff);
+      padding: 20px 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .category-header:hover {
+      background: linear-gradient(to right, #e9ecef, #f8f9fa);
+    }
+
+    .category-header.active {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    }
+
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .category-icon {
+      font-size: 1.5rem;
+    }
+
+    .expand-icon {
+      font-size: 1.2rem;
+      color: #66d0ea;
+      transition: transform 0.3s ease;
+    }
+
+    .category-header.active .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .category-content.show {
+      max-height: 2000px;
+    }
+
+    .medication-list {
+      padding: 20px 30px 30px 30px;
+      background: #fafbfc;
+    }
+
+    .medication-item {
+      background: white;
+      padding: 15px 20px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border-left: 4px solid #66eae3;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      animation: fadeInItem 0.4s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInItem {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .medication-item:nth-child(1) { animation-delay: 0.05s; }
+    .medication-item:nth-child(2) { animation-delay: 0.1s; }
+    .medication-item:nth-child(3) { animation-delay: 0.15s; }
+    .medication-item:nth-child(4) { animation-delay: 0.2s; }
+    .medication-item:nth-child(5) { animation-delay: 0.25s; }
+
+    .medication-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .medication-name {
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .medication-dose {
+      color: #66b7ea;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+
+    .error-message {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-left: 4px solid #2196f3;
+      padding: 20px 25px;
+      border-radius: 12px;
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+    }
+
+    .info-icon {
+      font-size: 1.5rem;
+      color: #2196f3;
+    }
+
+    .info-text {
+      color: #1565c0;
+      line-height: 1.6;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .header-title {
+        font-size: 1.2rem;
+      }
+
+      .calculator-section {
+        padding: 25px;
+      }
+
+      .input-wrapper {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .category-title {
+        font-size: 1rem;
+      }
+
+      .medication-list {
+        padding: 15px 20px 20px 20px;
+      }
+    }
+
+    /* Loading animation */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="Company Logo" onerror="this.style.display='none'">
+    </div>
+    <div class="header-title">💊 Respiratory Medication Dose Calculator</div>
+  </header>
+
+  <div class="container">
+    <div class="calculator-section">
+      <div class="input-group">
+        <label for="age">👤 Patient Age</label>
+        <div class="input-wrapper">
+          <div class="input-icon">📅</div>
+          <input 
+            type="number" 
+            id="age" 
+            placeholder="Enter age in years (e.g., 4)"
+            min="0"
+            max="120"
+            step="0.1"
+          >
+          <button onclick="calculateDose()">
+            <span>Calculate</span>
+            <span>🔍</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-icon">ℹ️</div>
+        <div class="info-text">
+          <strong>Important:</strong> This calculator provides general dosing guidelines, Doses may need adjustment based on individual patient factors.
+        </div>
+      </div>
+
+      <div id="error-container"></div>
+      
+      <div class="result-section" id="result-section">
+        <div class="result-header">
+          <h2>📋 Recommended Doses</h2>
+          <div class="age-badge" id="age-display"></div>
+        </div>
+        <div class="result-content" id="result-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const categoryIcons = {
+      'Mucolytics': '💧',
+      'Expectorant': '🌊',
+      '1st Gen Anti-Histamin': '💊',
+      '2nd Gen Anti-Histamin': '🔬'
+    };
+
+    function calculateDose() {
+      const ageInput = document.getElementById("age");
+      const age = parseFloat(ageInput.value);
+      const resultSection = document.getElementById("result-section");
+      const resultContent = document.getElementById("result-content");
+      const ageDisplay = document.getElementById("age-display");
+      const errorContainer = document.getElementById("error-container");
+
+      // Clear previous errors
+      errorContainer.innerHTML = "";
+
+      // Validation
+      if (isNaN(age) || age <= 0) {
+        showError("⚠️ Please enter a valid age (greater than 0)");
+        resultSection.classList.remove("show");
+        return;
+      }
+
+      if (age > 120) {
+        showError("⚠️ Please enter a realistic age");
+        resultSection.classList.remove("show");
+        return;
+      }
+
+      // Show loading state
+      const button = event.target;
+      const originalContent = button.innerHTML;
+      button.innerHTML = '<span class="loading"></span>';
+      button.disabled = true;
+
+      // Simulate loading delay for better UX
+      setTimeout(() => {
+        button.innerHTML = originalContent;
+        button.disabled = false;
+
+        // Display age
+        ageDisplay.textContent = `Age: ${age} ${age === 1 ? 'year' : 'years'}`;
+
+        // Get medications data
+        const medications = getMedicationsForAge(age);
+
+        if (medications.length === 0) {
+          resultContent.innerHTML = '<div class="no-data">❌ No dosing recommendations available for this age group.</div>';
+        } else {
+          resultContent.innerHTML = renderMedications(medications);
+          attachAccordionListeners();
+        }
+
+        // Show results with animation
+        resultSection.classList.add("show");
+        
+        // Scroll to results smoothly
+        setTimeout(() => {
+          resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }, 500);
+    }
+
+    function showError(message) {
+      const errorContainer = document.getElementById("error-container");
+      errorContainer.innerHTML = `
+        <div class="error-message">
+          <span>${message}</span>
+        </div>
+      `;
+    }
+
+    function getMedicationsForAge(age) {
+      const categories = [];
+
+      if (age >= 1 && age < 2) {
+        categories.push({
+          name: '2nd Gen Anti-Histamin',
+          medications: [
+            { name: 'Dimetindene', dose: '2 drops/kg/day divided into 3 times' }
+          ]
+        });
+      } else if (age >= 2 && age <= 5) {
+        categories.push({
+          name: 'Mucolytics',
+          medications: [
+            { name: 'Bromohexine 4mg/5ml', dose: '5ml twice daily' },
+            { name: 'Ambroxol 15mg/5ml', dose: '2.5ml 3 times' },
+            { name: 'Ambroxol 30mg/5ml', dose: '1.25ml 3 times' },
+            { name: 'Carbocystiene 2%', dose: '3ml - 5ml twice' }
+          ]
+        });
+        categories.push({
+          name: '1st Gen Anti-Histamin',
+          medications: [
+            { name: 'Chlorpheniramine', dose: '1mg 4 times' },
+            { name: 'Dimetindene', dose: '2 drops/Kg/Day divided on 3 times' }
+          ]
+        });
+        categories.push({
+          name: '2nd Gen Anti-Histamin',
+          medications: [
+            { name: 'Desloratadine', dose: '1.25mg/day' },
+            { name: 'Cetrizine', dose: '2.5mg/day' },
+            { name: 'Loratadine', dose: '5mg/day' },
+            { name: 'Fexofenadine', dose: '30mg twice' }
+          ]
+        });
+      } else if (age > 5 && age < 6) {
+        categories.push({
+          name: 'Mucolytics',
+          medications: [
+            { name: 'Bromohexine 4mg/5ml', dose: '5-10ml twice daily' },
+            { name: 'Ambroxol 15mg/5ml', dose: '2.5ml 3 times' },
+            { name: 'Ambroxol 30mg/5ml', dose: '1.25ml 3 times' },
+            { name: 'Carbocystiene 2%', dose: '5ml 3 times' }
+          ]
+        });
+        categories.push({
+          name: 'Expectorant',
+          medications: [
+            { name: 'Guaifenesin', dose: '50mg 4 times daily' }
+          ]
+        });
+        categories.push({
+          name: '1st Gen Anti-Histamin',
+          medications: [
+            { name: 'Chlorpheniramine', dose: '1mg 4 times' },
+            { name: 'Dimetindene', dose: '2 drops/Kg/Day divided on 3 times' }
+          ]
+        });
+        categories.push({
+          name: '2nd Gen Anti-Histamin',
+          medications: [
+            { name: 'Desloratadine', dose: '1.25mg/day' },
+            { name: 'Cetrizine', dose: '2.5mg/day' },
+            { name: 'Loratadine', dose: '5mg/day' },
+            { name: 'Fexofenadine', dose: '30mg twice' }
+          ]
+        });
+      } else if (age >= 6 && age <= 12) {
+        categories.push({
+          name: 'Mucolytics',
+          medications: [
+            { name: 'Bromohexine 4mg/5ml', dose: '5-10ml twice daily' },
+            { name: 'Ambroxol 15mg/5ml', dose: '5ml 3 times' },
+            { name: 'Ambroxol 30mg/5ml', dose: '2.5ml 3 times' },
+            { name: 'Carbocystiene 2%', dose: '5ml 3 times' }
+          ]
+        });
+        categories.push({
+          name: 'Expectorant',
+          medications: [
+            { name: 'Guaifenesin', dose: '100mg 4 times daily' }
+          ]
+        });
+        categories.push({
+          name: '1st Gen Anti-Histamin',
+          medications: [
+            { name: 'Chlorpheniramine', dose: '2mg 4 times' },
+            { name: 'Diphenhydramine', dose: '12.5-25mg 4 times' },
+            { name: 'Dimetindene', dose: '2 drops/Kg/Day divided on 3 times' }
+          ]
+        });
+        categories.push({
+          name: '2nd Gen Anti-Histamin',
+          medications: [
+            { name: 'Desloratadine', dose: '2.5mg/day' },
+            { name: 'Cetrizine', dose: '2.5-5mg/day' },
+            { name: 'Loratadine', dose: '10mg/day' },
+            { name: 'Fexofenadine', dose: '30mg twice' }
+          ]
+        });
+      } else if (age > 12) {
+        categories.push({
+          name: 'Mucolytics',
+          medications: [
+            { name: 'Bromohexine 4mg/ml', dose: '10ml 3 times' },
+            { name: 'Ambroxol 30mg/5ml', dose: '5ml 3 times' },
+            { name: 'Carbocystiene 5%', dose: '15ml 3 times' },
+            { name: 'Acetylcisteine', dose: '600mg once daily' }
+          ]
+        });
+        categories.push({
+          name: 'Expectorant',
+          medications: [
+            { name: 'Guaifenesin', dose: '200mg - 400mg 4 times daily' }
+          ]
+        });
+        categories.push({
+          name: '1st Gen Anti-Histamin',
+          medications: [
+            { name: 'Chlorpheniramine', dose: '4mg 4 times' },
+            { name: 'Diphenhydramine', dose: '25-50mg 4 times' },
+            { name: 'Dimetindene', dose: '20-40 drops 3 times' }
+          ]
+        });
+        categories.push({
+          name: '2nd Gen Anti-Histamin',
+          medications: [
+            { name: 'Desloratadine', dose: '5mg/day' },
+            { name: 'Cetrizine', dose: '5-10mg once' },
+            { name: 'Loratadine', dose: '10mg/day' },
+            { name: 'Fexofenadine', dose: '60mg twice' }
+          ]
+        });
+      }
+
+      return categories;
+    }
+
+    function renderMedications(categories) {
+      return categories.map(category => `
+        <div class="medication-category">
+          <div class="category-header" onclick="toggleCategory(this)">
+            <div class="category-title">
+              <span class="category-icon">${categoryIcons[category.name] || '💊'}</span>
+              <span>${category.name}</span>
+            </div>
+            <span class="expand-icon">▼</span>
+          </div>
+          <div class="category-content">
+            <div class="medication-list">
+              ${category.medications.map(med => `
+                <div class="medication-item">
+                  <div class="medication-name">${med.name}</div>
+                  <div class="medication-dose">📊 ${med.dose}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleCategory(header) {
+      const content = header.nextElementSibling;
+      const isActive = header.classList.contains('active');
+      
+      // Close all other categories
+      document.querySelectorAll('.category-header').forEach(h => {
+        h.classList.remove('active');
+        h.nextElementSibling.classList.remove('show');
+      });
+
+      // Toggle current category
+      if (!isActive) {
+        header.classList.add('active');
+        content.classList.add('show');
+      }
+    }
+
+    function attachAccordionListeners() {
+      // Auto-expand first category
+      const firstHeader = document.querySelector('.category-header');
+      if (firstHeader) {
+        firstHeader.click();
+      }
+    }
+
+    // Allow Enter key to calculate
+    document.getElementById('age').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        calculateDose();
+      }
+    });
+
+    // Auto-focus on input when page loads
+    window.addEventListener('load', () => {
+      document.getElementById('age').focus();
+    });
+  </script>
+</body>
+</html>
