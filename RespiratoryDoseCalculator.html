@@ -423,9 +423,9 @@
 </head>
 <body>
   <header>
-    <!-- <div class="logo">
+    <div class="logo">
       <img src="logo.png" alt="Company Logo" onerror="this.style.display='none'">
-    </div> -->
+    </div>
     <div class="header-title">💊 Respiratory Medication Dose Calculator</div>
   </header>
 
@@ -434,7 +434,7 @@
       <div class="input-group">
         <label for="age">👤 Patient Age</label>
         <div class="input-wrapper">
-          <div class="input-icon"></div>
+          <div class="input-icon">📅</div>
           <input 
             type="number" 
             id="age" 
@@ -743,6 +743,17 @@
     window.addEventListener('load', () => {
       document.getElementById('age').focus();
     });
+    document.addEventListener('keydown', function(e) {
+    if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) ||
+        (e.ctrlKey && e.key.toLowerCase() === 'u') || (e.ctrlKey && e.key.toLowerCase() === 's')
+    ) {
+        e.preventDefault();
+        return false;
+    }
+    });
+    document.addEventListener('contextmenu', e => e.preventDefault());
   </script>
 </body>
 </html>
